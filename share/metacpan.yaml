@@ -40,5 +40,49 @@ subcommands:
           completion:
             op: fieldnames
 
+  module:
+
+    summary: Module
+
+    subcommands:
+
+      info:
+        summary: Module
+        op: module_info
+        parameters:
+        - name: module
+          summary: Module name
+          type: string
+          completion:
+            op: modules
+
+
+  distribution:
+    summary: Distribution
+
+    subcommands:
+      info:
+        summary: Distribution info
+        op: distribution_info
+        parameters:
+        - name: distribution
+          summary: Distrubution name
+          type: string
+          completion:
+            op: distributions
+
+  release:
+    summary: Release
+
+    subcommands:
+      info:
+        summary: Release info
+        op: release_info
+        parameters:
+        - name: distribution
+          summary: Release name
+          type: string
+          completion:
+            op: distributions
 
 # vim:et:sts=2:sws=2:sw=2:foldmethod=indent

@@ -99,6 +99,75 @@ sub authors {
     return \@handles;
 }
 
+sub module_info {
+    my ($self, $run, $args) = @_;
+    my $c = _client();
+    my $options = $run->options;
+    my $parameters = $run->parameters;
+    my $modulename = $parameters->{module};
+    my $module = $c->module($modulename)
+        or die "Module $modulename not found";
+    $run->out($module->data);
+}
+
+sub modules {
+    my ($self, $run, $args) = @_;
+    my $c = _client();
+    my $options = $run->options;
+    my $parameters = $run->parameters;
+    my $modulename = $parameters->{module};
+    unless (length $modulename) {
+        return ();
+    }
+    my $modules = $c->module({ name => "$modulename*" })
+        or die "Module $modulename not found";
+    my @modules;
+    while (my $item = $modules->next) {
+        push @modules, $item->name;
+    }
+    return \@modules;
+}
+
+sub distribution_info {
+    my ($self, $run, $args) = @_;
+    my $c = _client();
+    my $options = $run->options;
+    my $parameters = $run->parameters;
+    my $distname = $parameters->{distribution};
+    my $dist = $c->distribution($distname)
+        or die "Distribution $distname not found";
+    $run->out($dist->data);
+}
+
+sub distributions {
+    my ($self, $run, $args) = @_;
+    my $c = _client();
+    my $options = $run->options;
+    my $parameters = $run->parameters;
+    my $distriname = $parameters->{distribution};
+    unless (length $distriname) {
+        return ();
+    }
+    my $distris = $c->distribution({ name => "$distriname*" })
+        or die "Distribution $distriname not found";
+    my @distris;
+    while (my $item = $distris->next) {
+        push @distris, $item->name;
+    }
+    return \@distris;
+}
+
+sub release_info {
+    my ($self, $run, $args) = @_;
+    my $c = _client();
+    my $options = $run->options;
+    my $parameters = $run->parameters;
+    my $distname = $parameters->{distribution};
+    my $dist = $c->release($distname)
+        or die "Distribution $distname not found";
+    $run->out($dist->data);
+}
+
 sub fieldnames {
     my ($self, $run, $args) = @_;
     my $c = _client();
