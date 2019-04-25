@@ -1,0 +1,13 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+use App::Spec;
+use App::AppSpec;
+use App::metacpan;
+use File::Share qw/ dist_file /;
+
+my $specfile = dist_file("App-metacpan", "metacpan.yaml");
+my $spec = App::Spec->read($specfile);
+my $run = $spec->runner;
+$run->run;

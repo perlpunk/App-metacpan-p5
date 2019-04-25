@@ -1,0 +1,44 @@
+name: metacpan
+appspec: { version: '0.001' }
+plugins: [Format]
+class: App::metacpan
+title: 'app title'
+description: 'app description'
+options:
+- verbose|v --Be verbose
+
+subcommands:
+
+  author:
+    summary: Author
+
+    subcommands:
+
+      info:
+        summary: Author info
+        op: author_info
+        parameters:
+        - name: handle
+          type: string
+          summary: CPAN handle (pause id)
+          completion:
+            op: authors
+
+      releases:
+        summary: Releases by author
+        op: author_releases
+        parameters:
+        - name: handle
+          type: string
+          summary: CPAN handle (pause id)
+          completion:
+            op: authors
+        options:
+        - name: fields
+          summary: List of field names
+          type: string
+          completion:
+            op: fieldnames
+
+
+# vim:et:sts=2:sws=2:sw=2:foldmethod=indent
