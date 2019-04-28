@@ -1,0 +1,7 @@
+completion:
+	appspec completion share/metacpan.yaml --zsh  > share/completion/zsh/_metacpan
+	appspec completion share/metacpan.yaml --bash  > share/completion/bash/metacpan.bash
+
+pod:
+	appspec pod share/metacpan.yaml > lib/metacpan.pod
+

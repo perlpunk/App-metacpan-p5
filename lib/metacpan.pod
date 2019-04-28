@@ -1,0 +1,205 @@
+=head1 NAME
+
+metacpan - Command line client for MetaCPAN::Client
+
+=head1 ABSTRACT
+
+
+
+=head1 DESCRIPTION
+
+This is a client for the perl module MetaCPAN::Client. It gives you access to
+the MetaCPAN API. You can retrieve information about authors, releases,
+modules and more.
+
+
+=head2 GLOBAL OPTIONS
+
+    --verbose -v    Be verbose (flag)       
+    --help -h       Show command help (flag)
+    --format        Format output           
+
+
+=head2 SUBCOMMANDS
+
+=head3  author
+
+    metacpan  author <subcommands>
+
+Author
+
+
+=head3 author info
+
+    metacpan author info [<handle>]
+
+Author info
+
+Parameters:
+
+    handle    CPAN handle (pause id)
+
+=head3 author list
+
+    metacpan author list [options] [<handle>]
+
+Author list
+
+Options:
+
+    --fields    List of field names
+
+Parameters:
+
+    handle    CPAN handle (pause id)
+
+=head3 author releases
+
+    metacpan author releases [options] [<handle>]
+
+Releases by author
+
+Options:
+
+    --fields    List of field names
+
+Parameters:
+
+    handle    CPAN handle (pause id)
+
+=head3  distribution
+
+    metacpan  distribution <subcommands>
+
+Distribution
+
+
+=head3 distribution info
+
+    metacpan distribution info <distribution>
+
+Distribution info
+
+Parameters:
+
+    distribution  *  Distrubution name
+
+=head3  favorite
+
+    metacpan  favorite <subcommands>
+
+Favorite
+
+
+=head3 favorite info
+
+    metacpan favorite info <distribution>
+
+Favorite info
+
+Parameters:
+
+    distribution  *  Distrubution name
+
+=head3 favorite list
+
+    metacpan favorite list [options] <distribution>
+
+Favorite list
+
+Options:
+
+    --fields    List of field names
+
+Parameters:
+
+    distribution  *  Distrubution name
+
+=head3  module
+
+    metacpan  module <subcommands>
+
+Module
+
+
+=head3 module info
+
+    metacpan module info [<module>]
+
+Module
+
+Parameters:
+
+    module    Module name
+
+=head3  release
+
+    metacpan  release <subcommands>
+
+Release
+
+
+=head3 release info
+
+    metacpan release info <distribution>
+
+Release info
+
+Parameters:
+
+    distribution  *  Distrubution name
+
+=head3  help
+
+    metacpan  help <subcommands> [options]
+
+Show command help
+
+Options:
+
+    --all     (flag)
+
+
+=head3  _meta
+
+    metacpan  _meta <subcommands>
+
+Information and utilities for this app
+
+
+=head3 _meta completion
+
+    metacpan _meta completion <subcommands>
+
+Shell completion functions
+
+
+=head3 _meta completion generate
+
+    metacpan _meta completion generate [options]
+
+Generate self completion
+
+Options:
+
+    --name    name of the program (optional, override name in spec)
+    --zsh     for zsh (flag)                                       
+    --bash    for bash (flag)                                      
+
+
+=head3 _meta pod
+
+    metacpan _meta pod <subcommands>
+
+Pod documentation
+
+
+=head3 _meta pod generate
+
+    metacpan _meta pod generate
+
+Generate self pod
+
+
+
+

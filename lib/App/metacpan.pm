@@ -1,3 +1,4 @@
+# ABSTRACT: Commandline client for METACPAN::Client
 use strict;
 use warnings;
 package App::metacpan;
@@ -87,7 +88,7 @@ sub author_releases {
     }, {
         sort => [{ date => { order => 'desc' } }],
     });
-    my @table = [map ucfirst @fields];
+    my @table = [map ucfirst, @fields];
     my @list;
     while (my $release = $releases->next) {
         if ($format eq 'Table') {
@@ -290,3 +291,42 @@ sub fieldnames {
 }
 
 1;
+
+__END__
+
+=pod
+
+=encoding utf-8
+
+=head1 NAME
+
+App::metacpan - Commandline client for METACPAN::Client
+
+=head1 SYNOPSIS
+
+See L<metacpan> for usage.
+
+=head1 DESCRIPTION
+
+See L<metacpan>.
+
+=head1 METHODS
+
+=over
+
+=item completion_dir, diff, features, module, modules, perl
+
+These are the methods that are called by C<metacpan subcommand>.
+
+See L<metacpan>.
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2019 by Tina Müller
+
+This library is free software and may be distributed under the same terms
+as perl itself.
+
+=cut

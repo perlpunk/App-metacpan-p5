@@ -1,0 +1,5 @@
+*.swp
+pod2htmd.tmp
+cover_db
+dev
+local

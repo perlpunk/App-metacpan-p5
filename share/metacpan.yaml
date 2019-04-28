@@ -4,7 +4,7 @@ plugins: [Format]
 class: App::metacpan
 title: Command line client for MetaCPAN::Client
 description: |
-  This is a client for the perl module MetaCAN::Client. It gives you access to
+  This is a client for the perl module MetaCPAN::Client. It gives you access to
   the MetaCPAN API. You can retrieve information about authors, releases,
   modules and more.
 
