@@ -21,7 +21,7 @@ _metacpan() {
 
     0)
         __comp_current_options || return
-        __metacpan_dynamic_comp 'commands' 'author'$'\t''Author'$'\n''distribution'$'\t''Distribution'$'\n''help'$'\t''Show command help'$'\n''module'$'\t''Module'$'\n''release'$'\t''Release'
+        __metacpan_dynamic_comp 'commands' 'author'$'\t''Author'$'\n''distribution'$'\t''Distribution'$'\n''favorite'$'\t''Favorite'$'\n''help'$'\t''Show command help'$'\n''module'$'\t''Module'$'\n''release'$'\t''Release'
 
     ;;
     *)
@@ -108,7 +108,7 @@ _metacpan() {
 
         1)
             __comp_current_options || return
-            __metacpan_dynamic_comp 'commands' 'info'$'\t''Author info'$'\n''releases'$'\t''Releases by author'
+            __metacpan_dynamic_comp 'commands' 'info'$'\t''Author info'$'\n''list'$'\t''Author list'$'\n''releases'$'\t''Releases by author'
 
         ;;
         *)
@@ -127,6 +127,31 @@ _metacpan() {
               2)
                   __comp_current_options || return
                     _metacpan_author_info_param_handle_completion
+              ;;
+
+
+            *)
+                __comp_current_options || return
+            ;;
+            esac
+          ;;
+          list)
+            OPTIONS+=('--fields' 'List of field names')
+            __metacpan_handle_options_flags
+            case ${MYWORDS[$INDEX-1]} in
+              --format)
+                _metacpan_compreply "'JSON'"$'\n'"'YAML'"$'\n'"'Table'"$'\n'"'Data__Dumper'"$'\n'"'Data__Dump'"
+                return
+              ;;
+              --fields)
+                _metacpan_author_list_option_fields_completion
+              ;;
+
+            esac
+            case $INDEX in
+              2)
+                  __comp_current_options || return
+                    _metacpan_author_list_param_handle_completion
               ;;
 
 
@@ -203,6 +228,69 @@ _metacpan() {
         ;;
         esac
       ;;
+      favorite)
+        __metacpan_handle_options_flags
+        case $INDEX in
+
+        1)
+            __comp_current_options || return
+            __metacpan_dynamic_comp 'commands' 'info'$'\t''Favorite info'$'\n''list'$'\t''Favorite list'
+
+        ;;
+        *)
+        # subcmds
+        case ${MYWORDS[1]} in
+          info)
+            __metacpan_handle_options_flags
+            case ${MYWORDS[$INDEX-1]} in
+              --format)
+                _metacpan_compreply "'JSON'"$'\n'"'YAML'"$'\n'"'Table'"$'\n'"'Data__Dumper'"$'\n'"'Data__Dump'"
+                return
+              ;;
+
+            esac
+            case $INDEX in
+              2)
+                  __comp_current_options || return
+                    _metacpan_favorite_info_param_distribution_completion
+              ;;
+
+
+            *)
+                __comp_current_options || return
+            ;;
+            esac
+          ;;
+          list)
+            OPTIONS+=('--fields' 'List of field names')
+            __metacpan_handle_options_flags
+            case ${MYWORDS[$INDEX-1]} in
+              --format)
+                _metacpan_compreply "'JSON'"$'\n'"'YAML'"$'\n'"'Table'"$'\n'"'Data__Dumper'"$'\n'"'Data__Dump'"
+                return
+              ;;
+              --fields)
+                _metacpan_favorite_list_option_fields_completion
+              ;;
+
+            esac
+            case $INDEX in
+              2)
+                  __comp_current_options || return
+                    _metacpan_favorite_list_param_distribution_completion
+              ;;
+
+
+            *)
+                __comp_current_options || return
+            ;;
+            esac
+          ;;
+        esac
+
+        ;;
+        esac
+      ;;
       help)
         FLAGS+=('--all' '')
         __metacpan_handle_options_flags
@@ -210,7 +298,7 @@ _metacpan() {
 
         1)
             __comp_current_options || return
-            __metacpan_dynamic_comp 'commands' 'author'$'\n''distribution'$'\n''module'$'\n''release'
+            __metacpan_dynamic_comp 'commands' 'author'$'\n''distribution'$'\n''favorite'$'\n''module'$'\n''release'
 
         ;;
         *)
@@ -281,13 +369,17 @@ _metacpan() {
 
             2)
                 __comp_current_options || return
-                __metacpan_dynamic_comp 'commands' 'info'$'\n''releases'
+                __metacpan_dynamic_comp 'commands' 'info'$'\n''list'$'\n''releases'
 
             ;;
             *)
             # subcmds
             case ${MYWORDS[2]} in
               info)
+                __metacpan_handle_options_flags
+                __comp_current_options true || return # no subcmds, no params/opts
+              ;;
+              list)
                 __metacpan_handle_options_flags
                 __comp_current_options true || return # no subcmds, no params/opts
               ;;
@@ -313,6 +405,31 @@ _metacpan() {
             # subcmds
             case ${MYWORDS[2]} in
               info)
+                __metacpan_handle_options_flags
+                __comp_current_options true || return # no subcmds, no params/opts
+              ;;
+            esac
+
+            ;;
+            esac
+          ;;
+          favorite)
+            __metacpan_handle_options_flags
+            case $INDEX in
+
+            2)
+                __comp_current_options || return
+                __metacpan_dynamic_comp 'commands' 'info'$'\n''list'
+
+            ;;
+            *)
+            # subcmds
+            case ${MYWORDS[2]} in
+              info)
+                __metacpan_handle_options_flags
+                __comp_current_options true || return # no subcmds, no params/opts
+              ;;
+              list)
                 __metacpan_handle_options_flags
                 __comp_current_options true || return # no subcmds, no params/opts
               ;;
@@ -466,6 +583,16 @@ _metacpan_author_info_param_handle_completion() {
     __dynamic_completion=`PERL5_APPSPECRUN_SHELL=bash PERL5_APPSPECRUN_COMPLETION_PARAMETER='handle' ${COMP_WORDS[@]}`
     __metacpan_dynamic_comp 'handle' "$__dynamic_completion"
 }
+_metacpan_author_list_option_fields_completion() {
+    local __dynamic_completion
+    __dynamic_completion=`PERL5_APPSPECRUN_SHELL=bash PERL5_APPSPECRUN_COMPLETION_PARAMETER='fields' ${COMP_WORDS[@]}`
+    __metacpan_dynamic_comp 'fields' "$__dynamic_completion"
+}
+_metacpan_author_list_param_handle_completion() {
+    local __dynamic_completion
+    __dynamic_completion=`PERL5_APPSPECRUN_SHELL=bash PERL5_APPSPECRUN_COMPLETION_PARAMETER='handle' ${COMP_WORDS[@]}`
+    __metacpan_dynamic_comp 'handle' "$__dynamic_completion"
+}
 _metacpan_author_releases_option_fields_completion() {
     local __dynamic_completion
     __dynamic_completion=`PERL5_APPSPECRUN_SHELL=bash PERL5_APPSPECRUN_COMPLETION_PARAMETER='fields' ${COMP_WORDS[@]}`
@@ -477,6 +604,21 @@ _metacpan_author_releases_param_handle_completion() {
     __metacpan_dynamic_comp 'handle' "$__dynamic_completion"
 }
 _metacpan_distribution_info_param_distribution_completion() {
+    local __dynamic_completion
+    __dynamic_completion=`PERL5_APPSPECRUN_SHELL=bash PERL5_APPSPECRUN_COMPLETION_PARAMETER='distribution' ${COMP_WORDS[@]}`
+    __metacpan_dynamic_comp 'distribution' "$__dynamic_completion"
+}
+_metacpan_favorite_info_param_distribution_completion() {
+    local __dynamic_completion
+    __dynamic_completion=`PERL5_APPSPECRUN_SHELL=bash PERL5_APPSPECRUN_COMPLETION_PARAMETER='distribution' ${COMP_WORDS[@]}`
+    __metacpan_dynamic_comp 'distribution' "$__dynamic_completion"
+}
+_metacpan_favorite_list_option_fields_completion() {
+    local __dynamic_completion
+    __dynamic_completion=`PERL5_APPSPECRUN_SHELL=bash PERL5_APPSPECRUN_COMPLETION_PARAMETER='fields' ${COMP_WORDS[@]}`
+    __metacpan_dynamic_comp 'fields' "$__dynamic_completion"
+}
+_metacpan_favorite_list_param_distribution_completion() {
     local __dynamic_completion
     __dynamic_completion=`PERL5_APPSPECRUN_SHELL=bash PERL5_APPSPECRUN_COMPLETION_PARAMETER='distribution' ${COMP_WORDS[@]}`
     __metacpan_dynamic_comp 'distribution' "$__dynamic_completion"

@@ -15,7 +15,7 @@ _metacpan() {
 
         case $state in
         cmd1)
-            _alternative 'args:cmd2:((author\:"Author" distribution\:"Distribution" help\:"Show command help" module\:"Module" release\:"Release"))'
+            _alternative 'args:cmd2:((author\:"Author" distribution\:"Distribution" favorite\:"Favorite" help\:"Show command help" module\:"Module" release\:"Release"))'
         ;;
 
         args)
@@ -138,7 +138,7 @@ _metacpan() {
 
                 case $state in
                 cmd2)
-                    _alternative 'args:cmd3:((info\:"Author info" releases\:"Releases by author"))'
+                    _alternative 'args:cmd3:((info\:"Author info" list\:"Author list" releases\:"Releases by author"))'
                 ;;
 
                 args)
@@ -160,6 +160,28 @@ _metacpan() {
                         case $state in
                         handle)
 _metacpan_author_info_param_handle_completion
+                        ;;
+                        esac
+
+                    ;;
+                    list)
+
+                        # ---- Command: author list
+                        _arguments -s -C \
+                            '1: :->cmd1' \
+                            '2: :->cmd2' \
+                            '3: :->handle' \
+                            '--verbose[Be verbose]' \
+                            '-v[Be verbose]' \
+                            '--help[Show command help]' \
+                            '-h[Show command help]' \
+                            '--format[Format output]:format:("JSON" "YAML" "Table" "Data__Dumper" "Data__Dump")' \
+                            '--fields[List of field names]:fields:_metacpan_author_list_option_fields_completion' \
+                            && ret=0
+
+                        case $state in
+                        handle)
+_metacpan_author_list_param_handle_completion
                         ;;
                         esac
 
@@ -236,6 +258,72 @@ _metacpan_distribution_info_param_distribution_completion
 
                 esac
             ;;
+            favorite)
+
+                # ---- Command: favorite
+                _arguments -s -C \
+                    '1: :->cmd1' \
+                    '2: :->cmd2' \
+                    '*: :->args' \
+                    && ret=0
+
+
+                case $state in
+                cmd2)
+                    _alternative 'args:cmd3:((info\:"Favorite info" list\:"Favorite list"))'
+                ;;
+
+                args)
+                    case $line[2] in
+                    info)
+
+                        # ---- Command: favorite info
+                        _arguments -s -C \
+                            '1: :->cmd1' \
+                            '2: :->cmd2' \
+                            '3: :->distribution' \
+                            '--verbose[Be verbose]' \
+                            '-v[Be verbose]' \
+                            '--help[Show command help]' \
+                            '-h[Show command help]' \
+                            '--format[Format output]:format:("JSON" "YAML" "Table" "Data__Dumper" "Data__Dump")' \
+                            && ret=0
+
+                        case $state in
+                        distribution)
+_metacpan_favorite_info_param_distribution_completion
+                        ;;
+                        esac
+
+                    ;;
+                    list)
+
+                        # ---- Command: favorite list
+                        _arguments -s -C \
+                            '1: :->cmd1' \
+                            '2: :->cmd2' \
+                            '3: :->distribution' \
+                            '--verbose[Be verbose]' \
+                            '-v[Be verbose]' \
+                            '--help[Show command help]' \
+                            '-h[Show command help]' \
+                            '--format[Format output]:format:("JSON" "YAML" "Table" "Data__Dumper" "Data__Dump")' \
+                            '--fields[List of field names]:fields:_metacpan_favorite_list_option_fields_completion' \
+                            && ret=0
+
+                        case $state in
+                        distribution)
+_metacpan_favorite_list_param_distribution_completion
+                        ;;
+                        esac
+
+                    ;;
+                    esac
+
+                ;;
+
+                esac
+            ;;
             help)
 
                 # ---- Command: help
@@ -248,7 +336,7 @@ _metacpan_distribution_info_param_distribution_completion
 
                 case $state in
                 cmd2)
-                    _alternative 'args:cmd3:((author distribution module release))'
+                    _alternative 'args:cmd3:((author distribution favorite module release))'
                 ;;
 
                 args)
@@ -376,7 +464,7 @@ _metacpan_distribution_info_param_distribution_completion
 
                         case $state in
                         cmd3)
-                            _alternative 'args:cmd4:((info releases))'
+                            _alternative 'args:cmd4:((info list releases))'
                         ;;
 
                         args)
@@ -384,6 +472,23 @@ _metacpan_distribution_info_param_distribution_completion
                             info)
 
                                 # ---- Command: help author info
+                                _arguments -s -C \
+                                    '1: :->cmd1' \
+                                    '2: :->cmd2' \
+                                    '3: :->cmd3' \
+                                    '--verbose[Be verbose]' \
+                                    '-v[Be verbose]' \
+                                    '--help[Show command help]' \
+                                    '-h[Show command help]' \
+                                    '--format[Format output]:format:("JSON" "YAML" "Table" "Data__Dumper" "Data__Dump")' \
+                                    '--all[]' \
+                                    && ret=0
+
+
+                            ;;
+                            list)
+
+                                # ---- Command: help author list
                                 _arguments -s -C \
                                     '1: :->cmd1' \
                                     '2: :->cmd2' \
@@ -442,6 +547,64 @@ _metacpan_distribution_info_param_distribution_completion
                             info)
 
                                 # ---- Command: help distribution info
+                                _arguments -s -C \
+                                    '1: :->cmd1' \
+                                    '2: :->cmd2' \
+                                    '3: :->cmd3' \
+                                    '--verbose[Be verbose]' \
+                                    '-v[Be verbose]' \
+                                    '--help[Show command help]' \
+                                    '-h[Show command help]' \
+                                    '--format[Format output]:format:("JSON" "YAML" "Table" "Data__Dumper" "Data__Dump")' \
+                                    '--all[]' \
+                                    && ret=0
+
+
+                            ;;
+                            esac
+
+                        ;;
+
+                        esac
+                    ;;
+                    favorite)
+
+                        # ---- Command: help favorite
+                        _arguments -s -C \
+                            '1: :->cmd1' \
+                            '2: :->cmd2' \
+                            '3: :->cmd3' \
+                            '*: :->args' \
+                            && ret=0
+
+
+                        case $state in
+                        cmd3)
+                            _alternative 'args:cmd4:((info list))'
+                        ;;
+
+                        args)
+                            case $line[3] in
+                            info)
+
+                                # ---- Command: help favorite info
+                                _arguments -s -C \
+                                    '1: :->cmd1' \
+                                    '2: :->cmd2' \
+                                    '3: :->cmd3' \
+                                    '--verbose[Be verbose]' \
+                                    '-v[Be verbose]' \
+                                    '--help[Show command help]' \
+                                    '-h[Show command help]' \
+                                    '--format[Format output]:format:("JSON" "YAML" "Table" "Data__Dumper" "Data__Dump")' \
+                                    '--all[]' \
+                                    && ret=0
+
+
+                            ;;
+                            list)
+
+                                # ---- Command: help favorite list
                                 _arguments -s -C \
                                     '1: :->cmd1' \
                                     '2: :->cmd2' \
@@ -651,6 +814,16 @@ _metacpan_author_info_param_handle_completion() {
     __dynamic_completion=`PERL5_APPSPECRUN_SHELL=zsh PERL5_APPSPECRUN_COMPLETION_PARAMETER='handle' "${words[@]}"`
     __metacpan_dynamic_comp 'handle' "$__dynamic_completion"
 }
+_metacpan_author_list_param_handle_completion() {
+    local __dynamic_completion
+    __dynamic_completion=`PERL5_APPSPECRUN_SHELL=zsh PERL5_APPSPECRUN_COMPLETION_PARAMETER='handle' "${words[@]}"`
+    __metacpan_dynamic_comp 'handle' "$__dynamic_completion"
+}
+_metacpan_author_list_option_fields_completion() {
+    local __dynamic_completion
+    __dynamic_completion=`PERL5_APPSPECRUN_SHELL=zsh PERL5_APPSPECRUN_COMPLETION_PARAMETER='fields' "${words[@]}"`
+    __metacpan_dynamic_comp 'fields' "$__dynamic_completion"
+}
 _metacpan_author_releases_param_handle_completion() {
     local __dynamic_completion
     __dynamic_completion=`PERL5_APPSPECRUN_SHELL=zsh PERL5_APPSPECRUN_COMPLETION_PARAMETER='handle' "${words[@]}"`
@@ -665,6 +838,21 @@ _metacpan_distribution_info_param_distribution_completion() {
     local __dynamic_completion
     __dynamic_completion=`PERL5_APPSPECRUN_SHELL=zsh PERL5_APPSPECRUN_COMPLETION_PARAMETER='distribution' "${words[@]}"`
     __metacpan_dynamic_comp 'distribution' "$__dynamic_completion"
+}
+_metacpan_favorite_info_param_distribution_completion() {
+    local __dynamic_completion
+    __dynamic_completion=`PERL5_APPSPECRUN_SHELL=zsh PERL5_APPSPECRUN_COMPLETION_PARAMETER='distribution' "${words[@]}"`
+    __metacpan_dynamic_comp 'distribution' "$__dynamic_completion"
+}
+_metacpan_favorite_list_param_distribution_completion() {
+    local __dynamic_completion
+    __dynamic_completion=`PERL5_APPSPECRUN_SHELL=zsh PERL5_APPSPECRUN_COMPLETION_PARAMETER='distribution' "${words[@]}"`
+    __metacpan_dynamic_comp 'distribution' "$__dynamic_completion"
+}
+_metacpan_favorite_list_option_fields_completion() {
+    local __dynamic_completion
+    __dynamic_completion=`PERL5_APPSPECRUN_SHELL=zsh PERL5_APPSPECRUN_COMPLETION_PARAMETER='fields' "${words[@]}"`
+    __metacpan_dynamic_comp 'fields' "$__dynamic_completion"
 }
 _metacpan_module_info_param_module_completion() {
     local __dynamic_completion

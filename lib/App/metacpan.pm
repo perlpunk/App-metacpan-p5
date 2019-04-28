@@ -40,6 +40,31 @@ sub author_info {
     $run->out($data);
 }
 
+sub author_list {
+    my ($self, $run) = @_;
+    my $c = _client();
+    my $options = $run->options;
+    my $parameters = $run->parameters;
+    my $handle = $parameters->{handle};
+    my @fields = qw/ pauseid name /;
+    if ($options->{fields}) {
+        my $fieldnames = $options->{fields};
+        @fields = split m/,/, $fieldnames;
+    }
+    my $authors = $mcpan->author({
+        pauseid => "$handle*",
+    }, {
+        sort => [{ pauseid => { order => 'asc' } }],
+    });
+    my @authors;
+    while (my $item = $authors->next) {
+        push @authors, {
+            map { $_ => $item->$_ } @fields
+        };
+    }
+    $run->out(\@authors);
+}
+
 sub author_releases {
     my ($self, $run) = @_;
     my $c = _client();
@@ -168,19 +193,69 @@ sub release_info {
     $run->out($dist->data);
 }
 
-sub fieldnames {
+sub favorite_info {
     my ($self, $run, $args) = @_;
     my $c = _client();
     my $options = $run->options;
     my $parameters = $run->parameters;
-    my $comp_param = $args->{parameter};
-    my $fields = $options->{fields};
-    my @possible = qw/
+    my $distname = $parameters->{distribution};
+    my $favorite = $c->favorite({ distribution => $distname })
+        or die "Distribution $distname not found";
+    $run->out($favorite->total);
+}
+
+sub favorite_list {
+    my ($self, $run, $args) = @_;
+    my $c = _client();
+    my $options = $run->options;
+    my $parameters = $run->parameters;
+    my $distname = $parameters->{distribution};
+    my @fields = qw/ release date author /;
+    if ($options->{fields}) {
+        my $fieldnames = $options->{fields};
+        @fields = split m/,/, $fieldnames;
+    }
+    my @fav;
+    my $favorite = $c->favorite({ distribution => $distname })
+        or die "Distribution $distname not found";
+    while (my $item = $favorite->next) {
+        push @fav, { map { $_ => $item->$_ } @fields };
+    }
+    $run->out(\@fav);
+}
+
+my %commandfields = (
+    "author releases" => [qw/
         status name date author maturity main_module id authorized
         archive version version_numified deprecated distribution
         abstract dependency license provides metadata resources stat
         tests
-    /;
+    /],
+    release => [qw/
+        status name date author maturity main_module id authorized
+        archive version version_numified deprecated distribution
+        abstract dependency license provides metadata resources stat
+        tests
+    /],
+    "favorite list" => [qw/
+        release date author user id distribution
+    /],
+    author => [qw/
+        pauseid name ascii_name city region country updated dir
+        gravatar_url user donation email website profile perlmongers
+        links blog release_count extra
+    /],
+);
+sub fieldnames {
+    my ($self, $run, $args) = @_;
+    my $c = _client();
+    my $options = $run->options;
+    my $commands = $run->commands;
+    my $parameters = $run->parameters;
+    my $comp_param = $args->{parameter};
+    my $fields = $options->{fields};
+    my $possible = $commandfields{ "@$commands" } || [];
+    my @possible = @$possible;
     my %possible;
     @possible{ @possible}  = ();
     my @complete;

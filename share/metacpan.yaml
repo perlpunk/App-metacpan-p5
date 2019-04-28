@@ -2,8 +2,12 @@ name: metacpan
 appspec: { version: '0.001' }
 plugins: [Format]
 class: App::metacpan
-title: 'app title'
-description: 'app description'
+title: Command line client for MetaCPAN::Client
+description: |
+  This is a client for the perl module MetaCAN::Client. It gives you access to
+  the MetaCPAN API. You can retrieve information about authors, releases,
+  modules and more.
+
 options:
 - verbose|v --Be verbose
 
@@ -27,6 +31,22 @@ subcommands:
       releases:
         summary: Releases by author
         op: author_releases
+        parameters:
+        - name: handle
+          type: string
+          summary: CPAN handle (pause id)
+          completion:
+            op: authors
+        options:
+        - name: fields
+          summary: List of field names
+          type: string
+          completion:
+            op: fieldnames
+
+      list:
+        summary: Author list
+        op: author_list
         parameters:
         - name: handle
           type: string
@@ -65,11 +85,35 @@ subcommands:
         summary: Distribution info
         op: distribution_info
         parameters:
-        - name: distribution
+        - &distri_param
+          name: distribution
           summary: Distrubution name
           type: string
+          required: true
           completion:
             op: distributions
+
+  favorite:
+    subcommand_required: false
+    summary: Favorite
+    subcommands:
+      list:
+        summary: Favorite list
+        op: favorite_list
+        parameters:
+        - *distri_param
+        options:
+        - name: fields
+          summary: List of field names
+          type: string
+          completion:
+            op: fieldnames
+
+      info:
+        summary: Favorite info
+        op: favorite_info
+        parameters:
+        - *distri_param
 
   release:
     summary: Release
@@ -79,10 +123,6 @@ subcommands:
         summary: Release info
         op: release_info
         parameters:
-        - name: distribution
-          summary: Release name
-          type: string
-          completion:
-            op: distributions
+        - *distri_param
 
 # vim:et:sts=2:sws=2:sw=2:foldmethod=indent
